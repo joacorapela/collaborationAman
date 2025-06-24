@@ -1,0 +1,8 @@
+*~
+*.bak
+figures/*
+code/*
+reports/ekfForKinematicsAndHeadOrientation/*
+!reports/ekfForKinematicsAndHeadOrientation/ekfForKinematicsAndHeadOrientation.tex
+!reports/ekfForKinematicsAndHeadOrientation/ekfForKinematicsAndHeadOrientation.pdf
+!reports/ekfForKinematicsAndHeadOrientation/Makefile

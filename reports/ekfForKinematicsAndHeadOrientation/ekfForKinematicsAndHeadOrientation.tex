@@ -51,7 +51,7 @@ Figure~\ref{fig:sim_measurements} plots the simulated noisy measurements.
 
 \subsubsection*{Parameter estimation}
 
-Parameter estimation is performed iteratively by maximizing the log-likelihood
+Parameter estimation is performed iteratively by maximising the log-likelihood
 of the model parameters. Figure~\ref{fig:sim_logLike} plots the obtained
 log-likelihood as a function of estimation time. The blue and red traces plot the
 log-likelihood obtained during estimation of the kinematics and
@@ -102,7 +102,7 @@ parameters accurately approximate their true values.
     \centering
     \href{https://www.gatsby.ucl.ac.uk/~rapela/aman/reports/ekfForKinematicsAndHeadOrientation/figures/true_initial_estimated_params_1_m0.png}{\includegraphics[width=5in]{figures/true_initial_estimated_params_1_m0.png}}
 
-    \caption{True, initial and estimated inital state mean parameters.}
+    \caption{True, initial and estimated initial state mean parameters.}
 
     \label{fig:m0_params}
 \end{figure}
@@ -225,7 +225,7 @@ and~\ref{fig:realData_sqrt_diag_V0_params} plot the initial
 state mean and standard deviation parameters, respectively.
 
 Figure~\ref{fig:realData_model_params} shows that the estimated model
-parameters are substantially different from the inital parameters, and
+parameters are substantially different from the initial parameters, and
 Figure~\ref{fig:realData_logLike} indicates that the change in these parameters
 increased the log-likelihood of the parameters. Thus, parameter estimation was
 beneficial.
@@ -248,7 +248,7 @@ and~\ref{fig:realData_sqrt_diag_V0_params}).
     \centering
     \href{https://www.gatsby.ucl.ac.uk/~rapela/aman/reports/ekfForKinematicsAndHeadOrientation/figures/initial_estimated_params_1_m0.html}{\includegraphics[width=5in]{figures/initial_estimated_params_1_m0.png}}
 
-    \caption{Initial and estimated inital state mean parameters.}
+    \caption{Initial and estimated initial state mean parameters.}
 
     \label{fig:realData_m0_params}
 \end{figure}
@@ -357,6 +357,28 @@ the horizon of 50 samples.
 
 \end{enumerate}
 
+\section{Conclusions}
+
+For simulated data we were able to obtain parameter estimates similar to the
+true ones, despite starting the estimation from a distant initial condition and
+using substantial noise in the simulation.
+%
+Yet, we noticed a problem in that the log-likelihood of the estimated model was
+substantially below its optimal value. We also observed that the parameters of
+the initial values of the state were not changed by the optimisation method.
+%
+Forecasting with the simulated data was good, with well calibrated confidence
+intervals containing the true values with high probability.
+
+For real data the learning method was effective, changing the initial parameter
+values to increase the likelihood of the data.
+%
+Forecasting was reasonable for horizons between 10 samples ($\sim$ 300~msec) and 50
+samples ($\sim$ 1.5~sec).
+
+It would be useful to compare the current forecaster with other ones, and to
+test it with more realistic data.
+
 \section{Methods}
 
 \subsection{Simulated data}
@@ -364,9 +386,9 @@ the horizon of 50 samples.
 To perform the simulations we used the script
 \href{https://github.com/joacorapela/lds_simulations/blob/master/code/scripts/doSimulateNDSwithGaussianNoise.py}{doSimulateNDSwithGaussianNoise.py}.
 
-Learning was performed by maximizing the model parameters likelihood by
-gradient ascent using PyTorch. This maximization was performed in two steps. First we
-maximized the likelihood of the kinematic parameters, and then we fixed the
+Learning was performed by maximising the model parameters likelihood by
+gradient ascent using PyTorch. This maximisation was performed in two steps. First we
+maximise the likelihood of the kinematic parameters, and then we fixed the
 kinematics parameters and maximised the likelihood with respect to the head
 orientation parameters. To estimate the kinematic parameters we used the script
 \href{https://github.com/joacorapela/lds_simulations/blob/master/code/scripts/doEstimateTorchKinematics.py}{doEstimateTorchKinematics.py},
@@ -399,12 +421,12 @@ We limited the analysis to a section lasting 194~seconds, starting at time
 \texttt{M24086\_20250203\_0\_tracking\_2025-02-06T10\_39\_59.csv}
 (Figure~\ref{fig:real_posAndHO}).
 
-As for the simulate data, learning was done by maximizing the likelihood of the
+As for the simulate data, learning was done by maximising the likelihood of the
 model parameters in two steps. First the likelihood of the kinematic parameters
-was maximized using the script
+was maximise using the script
 \href{https://github.com/joacorapela/lds_tracking_posOriMice/blob/master/code/scripts/doEstimateTorchKinematics.py}{doEstimateTorchKinematics.py},
 and then the kinematic parameters were fixed and the head orientation
-parameters were optimized using the script
+parameters were optimised using the script
 \href{https://github.com/joacorapela/lds_tracking_posOriMice/blob/master/code/scripts/doEstimateTorchKinematicsHO.py}{doEstimateTorchKinematicsHO.py}.
 
 Filtering was done with the script
