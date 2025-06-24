@@ -1,0 +1,425 @@
+\documentclass[12pt]{article}
+
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage[colorlinks=true]{hyperref}
+\usepackage{endfloat}
+
+\title{Application of the Extended Kalman Filter for Forecasting Mouse
+Kinematics and Head Orientation}
+
+\author{Joaqu\'{i}n Rapela}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\section{Introduction}
+
+We used a nonlinear state-space model and the Extended Kalman Filter
+algorithm\footnote{\url{https://github.com/joacorapela/lds/blob/master/docs/inference/ekfInference.pdf}}
+to infer kinematics and head orientation of simulated
+(Section~\ref{sec:simulatedData}) and real mice (Section~\ref{sec:realData}).
+
+\section{Results}
+
+\subsection{Simulated Data}
+\label{sec:simulatedData}
+
+Figure~\ref{fig:sim_true} plots the simulated true mouse positions, and
+Figure~\ref{fig:sim_measurements} plots the simulated noisy measurements.
+
+\begin{figure}
+    \centering
+    \href{https://www.gatsby.ucl.ac.uk/~rapela/aman/reports/ekfForKinematicsAndHeadOrientation/figures/34315983_simulation_state_pos2DandHO.html}{\includegraphics[width=5in]{figures/34315983_simulation_state_pos2DandHO.png}}
+    \caption{True simulated mouse positions and head orientations. Click on
+    the image to get its interactive version, and zoom in the plot to view the
+    head orientations (blue arrow).}
+    \label{fig:sim_true}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \href{https://www.gatsby.ucl.ac.uk/~rapela/aman/reports/ekfForKinematicsAndHeadOrientation/figures/34315983_simulation_measurement_pos2DandHO.html}{\includegraphics[width=5in]{figures/34315983_simulation_measurement_pos2DandHO.png}}
+    \caption{Simulated noisy mouse positions and head orientations. Click on
+    the image to get its interactive version, and zoom in the plot to view the
+    head orientations (blue arrow).}
+    \label{fig:sim_measurements}
+\end{figure}
+
+\subsubsection*{Parameter estimation}
+
+Parameter estimation is performed iteratively by maximizing the log-likelihood
+of the model parameters. Figure~\ref{fig:sim_logLike} plots the obtained
+log-likelihood as a function of estimation time. The blue and red traces plot the
+log-likelihood obtained during estimation of the kinematics and
+head-orientation parameters, respectively.
+%
+The estimation of the kinematics parameters is much faster since it uses the
+standard Kalman filter, while the estimation of the head-orientation parameters
+uses the slower extended Kalman filter. The black horizontal line plots the
+log-likelihood of the true model parameters.
+%
+That the log-likelihood of the true model parameter is substantially larger
+that obtained by the estimated parameters indicates a problem in the estimation
+method that we will address next (Section~\ref{sec:TODO}).
+
+\begin{figure}
+    \centering
+    \href{https://www.gatsby.ucl.ac.uk/~rapela/aman/reports/ekfForKinematicsAndHeadOrientation/figures/estimationLogLike_simulation.html}{\includegraphics[width=5in]{figures/estimationLogLike_simulation.png}}
+    \caption{Log-likelihood of estimated parameters as a function of estimation
+    time. The blue and red traces plot the log-likelihood obtained during the
+    estimation of the kinematics and head-orientation parameters, respectively.
+    The black horizontal line plots the log-likelihood of the true model
+    parameters. Click on the image to get its interactive version.}
+    \label{fig:sim_logLike}
+\end{figure}
+
+Figure~\ref{fig:model_params} plots the true, initial and estimated model
+parameters. Figures~\ref{fig:m0_params}
+and~\ref{fig:sqrt_diag_V0_params} plot the initial
+state mean and standard deviation parameters, respectively.
+
+Except from \texttt{omega\_Q\_std} and most initial state parameters, estimated
+parameters accurately approximate their true values.
+
+\begin{figure}
+    \centering
+    \href{https://www.gatsby.ucl.ac.uk/~rapela/aman/reports/ekfForKinematicsAndHeadOrientation/figures/true_initial_estimated_params_1_modelParams.png}{\includegraphics[width=5in]{figures/true_initial_estimated_params_1_modelParams.png}}
+
+    \caption{True, initial and estimated model parameters.  True and estimated
+    model parameters are not displayed for \texttt{cos\_theta\_Q\_std},
+    \texttt{sin\_theta\_Q\_std}, \texttt{cos\_theta\_R\_std} and
+    \texttt{sin\_theta\_R\_std} are not displayed because they all have small
+    absolute value.}
+
+    \label{fig:model_params}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \href{https://www.gatsby.ucl.ac.uk/~rapela/aman/reports/ekfForKinematicsAndHeadOrientation/figures/true_initial_estimated_params_1_m0.png}{\includegraphics[width=5in]{figures/true_initial_estimated_params_1_m0.png}}
+
+    \caption{True, initial and estimated inital state mean parameters.}
+
+    \label{fig:m0_params}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \href{https://www.gatsby.ucl.ac.uk/~rapela/aman/reports/ekfForKinematicsAndHeadOrientation/figures/true_initial_estimated_params_1_sqrt_diag_V0.png}{\includegraphics[width=5in]{figures/true_initial_estimated_params_1_sqrt_diag_V0.png}}
+
+    \caption{True, initial and estimated initial state standard deviation parameters.}
+
+    \label{fig:sqrt_diag_V0_params}
+\end{figure}
+
+\subsubsection*{Forecasting}
+
+Figure~\ref{fig:sim_h2_pos} and~\ref{fig:sim_h2_HO} plot the true, measured and forecasted positions
+and head orientations of the simulated mouse. Forecasting was performed with an horizon of 2 samples.
+%
+Figures~\ref{fig:sim_h20_pos}-\ref{fig:sim_h200_HO} show forecastings with horizons of 20 and 200 samples.
+
+Forecastings of positions are good for all horizons used. Forecastings of head
+orientation are good for horizons of 2 and 20 samples, but break down for 200
+samples.
+%
+The 95\% confidence intervals appear to be well calibrated, as the true
+positions and head orientation angles are covered by the confidence interval
+95\% of the time.
+
+\begin{figure}
+    \centering
+    \href{https://www.gatsby.ucl.ac.uk/~rapela/aman/reports/ekfForKinematicsAndHeadOrientation/figures/33351171_pos_forecasting.html}{\includegraphics[width=5in]{figures/33351171_pos_forecasting.png}}
+    \caption{True, measured and forecasted (horizon h=2 samples) horizontal (x) and vertical (y)
+    position of the simulated mouse. Click on the image to get its
+    interactive version.}
+    \label{fig:sim_h2_pos}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \href{https://www.gatsby.ucl.ac.uk/~rapela/aman/reports/ekfForKinematicsAndHeadOrientation/figures/33351171_HO_forecasting.html}{\includegraphics[width=5in]{figures/33351171_HO_forecasting.png}}
+    \caption{True, measured and forecasted (horizon h=2 samples) sine and
+    cosine of the head-orientation angle
+    of the simulated mouse. Click on the image to get its
+    interactive version.}
+    \label{fig:sim_h2_HO}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \href{https://www.gatsby.ucl.ac.uk/~rapela/aman/reports/ekfForKinematicsAndHeadOrientation/figures/35401086_pos_forecasting.html}{\includegraphics[width=5in]{figures/35401086_pos_forecasting.png}}
+    \caption{True, measured and forecasted (horizon h=20 samples) horizontal (x) and vertical (y)
+    position of the simulated mouse. Click on the image to get its
+    interactive version.}
+    \label{fig:sim_h20_pos}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \href{https://www.gatsby.ucl.ac.uk/~rapela/aman/reports/ekfForKinematicsAndHeadOrientation/figures/35401086_HO_forecasting.html}{\includegraphics[width=5in]{figures/35401086_HO_forecasting.png}}
+    \caption{True, measured and forecasted (horizon h=20 samples) sine and
+    cosine of the head-orientation angle
+    of the simulated mouse. Click on the image to get its
+    interactive version.}
+    \label{fig:sim_h20_HO}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \href{https://www.gatsby.ucl.ac.uk/~rapela/aman/reports/ekfForKinematicsAndHeadOrientation/figures/05075129_pos_forecasting.html}{\includegraphics[width=5in]{figures/05075129_pos_forecasting.png}}
+    \caption{True, measured and forecasted (horizon h=200 samples) horizontal (x) and vertical (y)
+    position of the simulated mouse. Click on the image to get its
+    interactive version.}
+    \label{fig:sim_h200_pos}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \href{https://www.gatsby.ucl.ac.uk/~rapela/aman/reports/ekfForKinematicsAndHeadOrientation/figures/05075129_HO_forecasting.html}{\includegraphics[width=5in]{figures/05075129_HO_forecasting.png}}
+    \caption{True, measured and forecasted (horizon h=200 samples) sine and
+    cosine of the head-orientation angle
+    of the simulated mouse. Click on the image to get its
+    interactive version.}
+    \label{fig:sim_h200_HO}
+\end{figure}
+
+\subsection{Real Data}
+\label{sec:realData}
+
+Figure~\ref{fig:real_posAndHO} plots the real mouse positions and head
+orientations that we forecast below.
+
+\begin{figure}
+    \centering
+    \href{https://www.gatsby.ucl.ac.uk/~rapela/aman/reports/ekfForKinematicsAndHeadOrientation/figures/M24086_20250203_0_tracking_2025-02-06T10_39_59.html}{\includegraphics[width=5in]{figures/M24086_20250203_0_tracking_2025-02-06T10_39_59.png}}
+    \caption{Positions and head orientation of the real mouse used for
+    forecasting below.}
+    \label{fig:real_posAndHO}
+\end{figure}
+
+\subsubsection*{Parameter estimation}
+
+Figure~\ref{fig:realData_logLike} plots the obtained
+log-likelihood as a function of estimation time. The blue and red traces plot the
+log-likelihood obtained during estimation of the kinematics and
+head-orientation parameters, respectively.
+
+\begin{figure}
+    \centering
+    \href{https://www.gatsby.ucl.ac.uk/~rapela/aman/reports/ekfForKinematicsAndHeadOrientation/figures/estimationLogLike_realData.html}{\includegraphics[width=5in]{figures/estimationLogLike_realData.png}}
+    \caption{Log-likelihood of estimated parameters as a function of estimation
+    time. The blue and red traces plot the log-likelihood obtained during the
+    estimation of the kinematics and head-orientation parameters,
+    respectively.}
+    \label{fig:realData_logLike}
+\end{figure}
+
+Figure~\ref{fig:realData_model_params} plots the initial and estimated model
+parameters. Figures~\ref{fig:realData_m0_params}
+and~\ref{fig:realData_sqrt_diag_V0_params} plot the initial
+state mean and standard deviation parameters, respectively.
+
+Figure~\ref{fig:realData_model_params} shows that the estimated model
+parameters are substantially different from the inital parameters, and
+Figure~\ref{fig:realData_logLike} indicates that the change in these parameters
+increased the log-likelihood of the parameters. Thus, parameter estimation was
+beneficial.
+%
+Note, however, that learning did not change much the initial values of the
+mean and standard deviation of the initial state
+(Figures~\ref{fig:realData_m0_params}
+and~\ref{fig:realData_sqrt_diag_V0_params}).
+
+\begin{figure}
+    \centering
+    \href{https://www.gatsby.ucl.ac.uk/~rapela/aman/reports/ekfForKinematicsAndHeadOrientation/figures/initial_estimated_params_1_modelParams.html}{\includegraphics[width=5in]{figures/initial_estimated_params_1_modelParams.png}}
+
+    \caption{Initial and estimated model parameters.}
+
+    \label{fig:realData_model_params}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \href{https://www.gatsby.ucl.ac.uk/~rapela/aman/reports/ekfForKinematicsAndHeadOrientation/figures/initial_estimated_params_1_m0.html}{\includegraphics[width=5in]{figures/initial_estimated_params_1_m0.png}}
+
+    \caption{Initial and estimated inital state mean parameters.}
+
+    \label{fig:realData_m0_params}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \href{https://www.gatsby.ucl.ac.uk/~rapela/aman/reports/ekfForKinematicsAndHeadOrientation/figures/initial_estimated_params_1_sqrt_diag_V0.html}{\includegraphics[width=5in]{figures/initial_estimated_params_1_sqrt_diag_V0.png}}
+
+    \caption{Initial and estimated initial state standard deviation parameters.}
+
+    \label{fig:realData_sqrt_diag_V0_params}
+\end{figure}
+
+\subsubsection*{Forecasting}
+
+Figure~\ref{fig:real_h2_pos} and~\ref{fig:real_h2_HO} plot the measured and
+forecasted positions and head orientations of a real mouse. Forecasting was
+performed with an horizon of 2 samples.
+%
+Figures~\ref{fig:real_h10_pos}-\ref{fig:real_h50_HO} show forecastings with
+horizons of 10 and 50 samples.
+
+Forecastings of head orientation are reasonable for all horizons. Forecastings
+of position are good for horizons of 2 and 10 samples, but they break down for
+the horizon of 50 samples.
+
+\begin{figure}
+    \centering
+    \href{https://www.gatsby.ucl.ac.uk/~rapela/aman/reports/ekfForKinematicsAndHeadOrientation/figures/32963939_pos_forecasting.html}{\includegraphics[width=5in]{figures/32963939_pos_forecasting.png}}
+    \caption{Measured and forecasted (horizon h=2 samples) horizontal (x) and
+    vertical (y) position of a real mouse. Click on the image to get its
+    interactive version.}
+    \label{fig:real_h2_pos}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \href{https://www.gatsby.ucl.ac.uk/~rapela/aman/reports/ekfForKinematicsAndHeadOrientation/figures/32963939_HO_forecasting.html}{\includegraphics[width=5in]{figures/32963939_HO_forecasting.png}}
+    \caption{Measured and forecasted (horizon h=2 samples) sine and cosine of
+    the head-orientation angle of a real mouse. Click on the image to get
+    its interactive version.}
+    \label{fig:real_h2_HO}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \href{https://www.gatsby.ucl.ac.uk/~rapela/aman/reports/ekfForKinematicsAndHeadOrientation/figures/43112733_pos_forecasting.html}{\includegraphics[width=5in]{figures/43112733_pos_forecasting.png}}
+    \caption{Measured and forecasted (horizon h=10 samples) horizontal (x) and
+    vertical (y) position of a real mouse. Click on the image to get its
+    interactive version.}
+    \label{fig:real_h10_pos}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \href{https://www.gatsby.ucl.ac.uk/~rapela/aman/reports/ekfForKinematicsAndHeadOrientation/figures/43112733_HO_forecasting.html}{\includegraphics[width=5in]{figures/43112733_HO_forecasting.png}}
+    \caption{Measured and forecasted (horizon h=10 samples) sine and cosine of
+    the head-orientation angle of a real mouse. Click on the image to get
+    its interactive version.}
+    \label{fig:real_h10_HO}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \href{https://www.gatsby.ucl.ac.uk/~rapela/aman/reports/ekfForKinematicsAndHeadOrientation/figures/85124492_pos_forecasting.html}{\includegraphics[width=5in]{figures/85124492_pos_forecasting.png}}
+    \caption{Measured and forecasted (horizon h=50 samples) horizontal (x) and
+    vertical (y) position of a real mouse. Click on the image to get its
+    interactive version.}
+    \label{fig:real_h50_pos}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \href{https://www.gatsby.ucl.ac.uk/~rapela/aman/reports/ekfForKinematicsAndHeadOrientation/figures/85124492_HO_forecasting.html}{\includegraphics[width=5in]{figures/85124492_HO_forecasting.png}}
+    \caption{Measured and forecasted (horizon h=50 samples) sine and cosine of
+    the head-orientation angle of a real mouse. Click on the image to get
+    its interactive version.}
+    \label{fig:real_h50_HO}
+\end{figure}
+
+\section{TODO list}
+\label{sec:TODO}
+
+\begin{enumerate}
+
+    \item Fix the problem in the estimation of parameters of the extended
+        Kalman filter model. As shown in Figure~\ref{fig:sim_logLike}, the
+        method to estimate parameters of the extended Kalman filter model
+        cannot achieve the log likelihood obtained with the true model
+        parameters.
+
+    \item Use ONIX recordings to check the accuracy of the kinematics model.
+
+    \item Forecast data from other experimental periods.
+
+    \item Evaluate forecasting performance on less noisy real data.
+
+    \item Compare forecasting performance of the extended Kalman filter model
+        with that from other forecasters (e.g., RNN, XFADS and simpler
+        forecasters).
+
+    \item Evaluate the forecaster with data from a robot with a camera
+        exploring the arena with the 360 degree screen.
+
+    \item Integrate forecaster into Bonsai.ML.
+
+\end{enumerate}
+
+\section{Methods}
+
+\subsection{Simulated data}
+
+To perform the simulations we used the script
+\href{https://github.com/joacorapela/lds_simulations/blob/master/code/scripts/doSimulateNDSwithGaussianNoise.py}{doSimulateNDSwithGaussianNoise.py}.
+
+Learning was performed by maximizing the model parameters likelihood by
+gradient ascent using PyTorch. This maximization was performed in two steps. First we
+maximized the likelihood of the kinematic parameters, and then we fixed the
+kinematics parameters and maximised the likelihood with respect to the head
+orientation parameters. To estimate the kinematic parameters we used the script
+\href{https://github.com/joacorapela/lds_simulations/blob/master/code/scripts/doEstimateTorchKinematics.py}{doEstimateTorchKinematics.py},
+and to estimate the head orientation parameters we used the script
+\href{https://github.com/joacorapela/lds_simulations/blob/master/code/scripts/doEstimateTorchKinematicsHO.py}{doEstimateTorchKinematicsHO.py}.
+
+After learning the model parameters, we performed inference on the model latents
+using the script
+\href{https://github.com/joacorapela/lds_simulations/blob/master/code/scripts/doEKFilter.py}{doEKFilter.py}
+
+After inferring the model latents, we performed forecasting using the script
+\href{https://github.com/joacorapela/lds_simulations/blob/master/code/scripts/doEKForecasting.py}{doEKForecasting.py}.
+
+Figures~\ref{fig:sim_true} and~\ref{fig:sim_measurements} were generated with
+the script
+\href{https://github.com/joacorapela/lds_simulations/blob/master/code/scripts/doPlotSimulation.py}{doPlotSimulation.py},
+Figure~\ref{fig:sim_logLike} was generated with the script
+    \href{https://github.com/joacorapela/lds_simulations/blob/master/code/scripts/doPlotEstimationLogLikelihood.py}{doPlotEstimationLogLikelihood.py},
+    Figures~\ref{fig:model_params}-\ref{fig:sqrt_diag_V0_params} were generated
+    with the script
+    \href{https://github.com/joacorapela/lds_simulations/blob/master/code/scripts/doPlotTrueInitialEstimatedParams.py}{doPlotTrueInitialEstimatedParams.py},
+and Figures~\ref{fig:sim_h2_pos}-\ref{fig:sim_h200_HO} were generated with the
+script
+\href{https://github.com/joacorapela/lds_simulations/blob/master/code/scripts/doPlotForecasting.py}{doPlotForecasting.py}.
+
+\subsection{Real data}
+
+We limited the analysis to a section lasting 194~seconds, starting at time
+1450~seconds, from file
+\texttt{M24086\_20250203\_0\_tracking\_2025-02-06T10\_39\_59.csv}
+(Figure~\ref{fig:real_posAndHO}).
+
+As for the simulate data, learning was done by maximizing the likelihood of the
+model parameters in two steps. First the likelihood of the kinematic parameters
+was maximized using the script
+\href{https://github.com/joacorapela/lds_tracking_posOriMice/blob/master/code/scripts/doEstimateTorchKinematics.py}{doEstimateTorchKinematics.py},
+and then the kinematic parameters were fixed and the head orientation
+parameters were optimized using the script
+\href{https://github.com/joacorapela/lds_tracking_posOriMice/blob/master/code/scripts/doEstimateTorchKinematicsHO.py}{doEstimateTorchKinematicsHO.py}.
+
+Filtering was done with the script
+\href{https://github.com/joacorapela/lds_tracking_posOriMice/blob/master/code/scripts/doEKFkinematicsHO.py}{doEKFkinematicsHO.py}
+and forecasting with the script
+\href{https://github.com/joacorapela/lds_tracking_posOriMice/blob/master/code/scripts/doEKForecasting.py}{doEKForecasting.py}.
+
+Figure~\ref{fig:real_posAndHO} was generated using the script
+\href{https://github.com/joacorapela/lds_tracking_posOriMice/blob/master/code/scripts/doPlotData.py}{doPlotData.py},
+Figure~\ref{fig:realData_logLike} was generated with the script
+\href{https://github.com/joacorapela/lds_tracking_posOriMice/blob/master/code/scripts/doPlotEstimationLogLikelihood.py}{doPlotEstimationLogLikelihood.py},
+Figures~\ref{fig:realData_model_params}-\ref{fig:realData_sqrt_diag_V0_params}
+were generated with the script
+\href{https://github.com/joacorapela/lds_tracking_posOriMice/blob/master/code/scripts/doPlotInitialEstimatedParams.py}{doPlotInitialEstimatedParams.py},
+and Figures~\ref{fig:real_h2_pos}-\ref{fig:real_h50_HO} were generated using the script
+\href{https://github.com/joacorapela/lds_tracking_posOriMice/blob/master/code/scripts/doPlotForecasting.py}{doPlotForecasting.py}.
+
+\end{document}
