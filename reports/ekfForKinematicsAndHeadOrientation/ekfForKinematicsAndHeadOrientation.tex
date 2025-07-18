@@ -87,7 +87,7 @@ parameters accurately approximate their true values.
 
 \begin{figure}
     \centering
-    \href{https://www.gatsby.ucl.ac.uk/~rapela/aman/reports/ekfForKinematicsAndHeadOrientation/figures/true_initial_estimated_params_1_modelParams.png}{\includegraphics[width=5in]{figures/true_initial_estimated_params_1_modelParams.png}}
+    \href{https://www.gatsby.ucl.ac.uk/~rapela/aman/reports/ekfForKinematicsAndHeadOrientation/figures/true_initial_estimated_params_1_modelParams.html}{\includegraphics[width=5in]{figures/true_initial_estimated_params_1_modelParams.png}}
 
     \caption{True, initial and estimated model parameters.  True and estimated
     model parameters are not displayed for \texttt{cos\_theta\_Q\_std},
@@ -114,6 +114,76 @@ parameters accurately approximate their true values.
     \caption{True, initial and estimated initial state standard deviation parameters.}
 
     \label{fig:sqrt_diag_V0_params}
+\end{figure}
+
+\subsubsection*{Filtering}
+
+Figure~\ref{fig:sim_filtered_pos} plots the true positions of the simulated
+mouse, the noisy positions measurements and the filtered positions
+measurements.
+
+\begin{figure}
+    \centering
+    \href{https://www.gatsby.ucl.ac.uk/~rapela/aman/reports/ekfForKinematicsAndHeadOrientation/figures/40392987_pos_filtered.html}{\includegraphics[width=5in]{figures/40392987_pos_filtered.png}}
+
+    \caption{Measured, true and filtered positions.}
+
+    \label{fig:sim_filtered_pos}
+\end{figure}
+
+Figures~\ref{fig:sim_filtered_vel} and~\ref{fig:sim_filtered_acc} plots the
+true and filtered velocities and accelerations. They also plot their estimates
+based on the finite-differences method, which are very inaccurate, specially
+for accelerations.
+
+\begin{figure}
+    \centering
+    \href{https://www.gatsby.ucl.ac.uk/~rapela/aman/reports/ekfForKinematicsAndHeadOrientation/figures/40392987_vel_filtered.html}{\includegraphics[width=5in]{figures/40392987_vel_filtered.png}}
+
+    \caption{True, filtered and finite differences estimates (labelled as
+    measurements) velocities.}
+
+    \label{fig:sim_filtered_vel}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \href{https://www.gatsby.ucl.ac.uk/~rapela/aman/reports/ekfForKinematicsAndHeadOrientation/figures/40392987_acc_filtered.html}{\includegraphics[width=5in]{figures/40392987_acc_filtered.png}}
+
+    \caption{True, filtered and finite differences estimates
+    (labelled as measurements) accelerations.}
+
+    \label{fig:sim_filtered_acc}
+\end{figure}
+
+Figure~\ref{fig:sim_filtered_hor} plots the measured, true and filtered cosine
+and sine of the head-orientation angle. These quantities were simulated with
+very little noise. Thus, the measurements are on top of the true values, and
+the filtered values have a very narrow 95\% confidence band.
+
+\begin{figure}
+    \centering
+    \href{https://www.gatsby.ucl.ac.uk/~rapela/aman/reports/ekfForKinematicsAndHeadOrientation/figures/40392987_hor_filtered.html}{\includegraphics[width=5in]{figures/40392987_hor_filtered.png}}
+
+    \caption{Measured, true and filtered cosine (x) and sine (y) of the head
+    orientation angle, $\theta$.}
+
+    \label{fig:sim_filtered_hor}
+\end{figure}
+
+Figure~\ref{fig:sim_filtered_avel} plots the true and filtered angular
+velocity, $\omega$. This variable is not measured. Note that the variability of the
+filtered values is larger than that of the true ones, because the estimated
+standard deviation of angular velocity is much larger than the true variance
+(column \texttt{omega\_Q\_std}, Figure~\ref{fig:model_params}).
+
+\begin{figure}
+    \centering
+    \href{https://www.gatsby.ucl.ac.uk/~rapela/aman/reports/ekfForKinematicsAndHeadOrientation/figures/40392987_avel_filtered.html}{\includegraphics[width=5in]{figures/40392987_avel_filtered.png}}
+
+    \caption{True and filtered head angular velocity, $\omega$.}
+
+    \label{fig:sim_filtered_avel}
 \end{figure}
 
 \subsubsection*{Forecasting}
@@ -197,8 +267,12 @@ orientations that we forecast below.
 \begin{figure}
     \centering
     \href{https://www.gatsby.ucl.ac.uk/~rapela/aman/reports/ekfForKinematicsAndHeadOrientation/figures/M24086_20250203_0_tracking_2025-02-06T10_39_59.html}{\includegraphics[width=5in]{figures/M24086_20250203_0_tracking_2025-02-06T10_39_59.png}}
+
     \caption{Positions and head orientation of the real mouse used for
-    forecasting below.}
+    forecasting below. The positions and head orientations were extracted from
+    file \texttt{M24086\_20250203\_0\_tracking\_2025-02-06T10\_39\_59.csv}
+    (194~seconds starting at time 1450).}
+
     \label{fig:real_posAndHO}
 \end{figure}
 
@@ -260,6 +334,76 @@ and~\ref{fig:realData_sqrt_diag_V0_params}).
     \caption{Initial and estimated initial state standard deviation parameters.}
 
     \label{fig:realData_sqrt_diag_V0_params}
+\end{figure}
+
+\subsubsection*{Filtering}
+
+Figure~\ref{fig:real_filtered_pos} plots the positions measurements and the filtered positions
+estimates. The latter are smoothed versions of the former. The 95\% confidence
+bands appear to be well calibrated.
+
+\begin{figure}
+    \centering
+    \href{https://www.gatsby.ucl.ac.uk/~rapela/aman/reports/ekfForKinematicsAndHeadOrientation/figures/91672310_measuredAndEstimated_pos_start1450.00_dur194.00.html}{\includegraphics[width=5in]{figures/91672310_measuredAndEstimated_pos_start1450.00_dur194.00.png}}
+
+    \caption{Measured and filtered positions.}
+
+    \label{fig:real_filtered_pos}
+\end{figure}
+
+Figures~\ref{fig:real_filtered_vel} and~\ref{fig:real_filtered_acc} plots the
+filtered velocities and accelerations. They also plot their estimates
+based on the finite-differences method, which are order of magnitude larger
+than the Kalman filter estimates, specially
+for accelerations.
+
+\begin{figure}
+    \centering
+    \href{https://www.gatsby.ucl.ac.uk/~rapela/aman/reports/ekfForKinematicsAndHeadOrientation/figures/91672310_measuredAndEstimated_vel_start1450.00_dur194.00.html}{\includegraphics[width=5in]{figures/91672310_measuredAndEstimated_vel_start1450.00_dur194.00.png}}
+
+    \caption{Filtered and finite differences estimates (labelled as
+    measurements) velocities.}
+
+    \label{fig:real_filtered_vel}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \href{https://www.gatsby.ucl.ac.uk/~rapela/aman/reports/ekfForKinematicsAndHeadOrientation/figures/91672310_measuredAndEstimated_acc_start1450.00_dur194.00.html}{\includegraphics[width=5in]{figures/91672310_measuredAndEstimated_acc_start1450.00_dur194.00.png}}
+
+    \caption{Filtered and finite differences estimates
+    (labelled as measurements) accelerations.}
+
+    \label{fig:real_filtered_acc}
+\end{figure}
+
+Figure~\ref{fig:real_filtered_hor} plots the measured and filtered cosine
+and sine of the head-orientation angle. The filtered values are slightly
+smoother than the measured values. Also, the filtered values provide good
+estimates of missing values.
+
+\begin{figure}
+    \centering
+    \href{https://www.gatsby.ucl.ac.uk/~rapela/aman/reports/ekfForKinematicsAndHeadOrientation/figures/91672310_measuredAndEstimated_hor_start1450.00_dur194.00.html}{\includegraphics[width=5in]{figures/91672310_measuredAndEstimated_hor_start1450.00_dur194.00.png}}
+
+    \caption{Measured, true and filtered cosine (x) and sine (y) of the head
+    orientation angle, $\theta$.}
+
+    \label{fig:real_filtered_hor}
+\end{figure}
+
+Figure~\ref{fig:real_filtered_avel} plots the filtered angular
+velocity, $\omega$. This variable is not measured. It would be good to look in
+the behavioral videos the mouse behavior at times where the model estimates
+large positive or negative values of angular velocity.
+
+\begin{figure}
+    \centering
+    \href{https://www.gatsby.ucl.ac.uk/~rapela/aman/reports/ekfForKinematicsAndHeadOrientation/figures/91672310_measuredAndEstimated_avel_start1450.00_dur194.00.html}{\includegraphics[width=5in]{figures/91672310_measuredAndEstimated_avel_start1450.00_dur194.00.png}}
+
+    \caption{True and filtered head angular velocity, $\omega$.}
+
+    \label{fig:real_filtered_avel}
 \end{figure}
 
 \subsubsection*{Forecasting}
@@ -423,7 +567,7 @@ We limited the analysis to a section lasting 194~seconds, starting at time
 
 As for the simulate data, learning was done by maximising the likelihood of the
 model parameters in two steps. First the likelihood of the kinematic parameters
-was maximise using the script
+was maximised using the script
 \href{https://github.com/joacorapela/lds_tracking_posOriMice/blob/master/code/scripts/doEstimateTorchKinematics.py}{doEstimateTorchKinematics.py},
 and then the kinematic parameters were fixed and the head orientation
 parameters were optimised using the script
